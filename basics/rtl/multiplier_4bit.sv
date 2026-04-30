@@ -21,27 +21,27 @@ module multiplier_4bit #(parameter N = 4)(
     assign pp3 = {4{x[3]}} & y;
 
     // Stage 1: Adding Partial Products pp0 and pp1
-    assign p[0] = pp0[0];
+    assign p[0] = pp0[0]; 
 
-    cla u0(
-        .x({1'b0, pp0[3:1]}), .y(pp1), .cin(1'b0), .sum(s), .cout(c4)
-    );
+    cla_4bit u0(
+        .x({1'b0, pp0[3:1]}), .y(pp1), .cin(1'b0), .sum(s), .cout(c4)  // pp0 concantinated with 0 (to accomodate for pp0[0] being p[0]), then added to pp1
+    ); // Outputs sum s, where s[0] is p[1], and s[3:1] must still be added to the next stage
 
     assign p[1] = s[0];
 
     // Stage 2: Adding Partial Products pp2 and pp3
-    assign t[0] = pp2[0];
+    assign t[0] = pp2[0]; // pp2[0] is directly assigned to t[0] (since it's the first bit in stage and dosent need to be added), to be added to s[1] in the next stage
 
-    cla u1(
+    cla_4bit u1(
         .x({1'b0, pp2[3:1]}), .y(pp3), .cin(1'b0), .sum(t[4:1]), .cout(e6)
     );
 
-    // Stage 3: Adding stage 1 and stage 2
-    cla u2(
+    // Stage 3: Adding stage 1 and stage 2, and carries in their respective places -- broken into 2 parts to accomodate for CLAs being 4 bit wide.
+    cla_4bit u2(
         .x({c4, s[3:1]}), .y(t[3:0]), .cin(1'b0), .sum(p[5:2]), .cout(j3)
     );
-    cla u3(
-        .x(4'b0), .y({2'b0, e6, t[4]}), .cin(j3), .sum(u3_sum), .cout()
+    cla_4bit u3(
+        .x(4'b0), .y({2'b0, e6, t[4]}), .cin(j3), .sum(u3_sum), .cout() // Adds carries and outputs of stage 2 to carry out of first adder in stage 3
     );
 
     assign p[7:6] = u3_sum[1:0];   // Only need first 2 values from cla u3

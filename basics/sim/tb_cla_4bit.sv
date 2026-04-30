@@ -2,12 +2,12 @@
 
 `timescale 1ns/1ps
 
-module tb_cla;
+module tb_cla_4bit;
 
     logic [3:0] a, b, sum;
     logic cin, cout;
 
-    cla dut (.x(a), .y(b), .cin(cin), .sum(sum), .cout(cout));
+    cla_4bit dut (.x(a), .y(b), .cin(cin), .sum(sum), .cout(cout));
 
     initial begin
         a = 4'b0000; b = 4'b0000; cin = 1'b0; // Expected 0000
