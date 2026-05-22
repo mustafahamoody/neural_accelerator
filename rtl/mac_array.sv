@@ -6,12 +6,12 @@ module mac_array #(parameter BIT_WIDTH = 16, INPUT_WIDTH = 784, MAC_UNITS = 64) 
     input logic clk, en, rst, clr,
     output logic signed [MAC_UNITS-1:0][2*BIT_WIDTH-1 + $clog2(INPUT_WIDTH) : 0] out
 );
-    genvar units;
+    genvar unit;
     generate
-        for (units = 0; units < MAC_UNITS; units++) begin: mac_instances
+        for (unit = 0; unit < MAC_UNITS; unit++) begin: mac_instances
         // Instantiate MAC and override its default parameters
             mac_unit #(.BIT_WIDTH(BIT_WIDTH), .MAC_CYCLES(INPUT_WIDTH)) 
-            single_mac_unit (.w(w[units]), .x(x), .clk(clk), .en(en), .rst(rst), .clr(clr), .out(out[units]));
+            single_mac_unit (.w(w[unit]), .x(x), .clk(clk), .en(en), .rst(rst), .clr(clr), .out(out[unit]));
         end
     endgenerate
 
