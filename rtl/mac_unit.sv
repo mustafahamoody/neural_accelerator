@@ -23,5 +23,14 @@ module mac_unit #(parameter BIT_WIDTH = 16, MAC_CYCLES = 784)(
     end
 
     assign out = acc;
+
+
+// dump sim data into a .vcd to analyse wavefore
+`ifdef SIM_DUMP
+initial begin
+    $dumpfile("mac_unit.vcd");
+    $dumpvars(0, mac_unit);
+end
+`endif
     
 endmodule

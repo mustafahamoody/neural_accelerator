@@ -1,1 +1,5 @@
 out/
+*.vcd
+sim_build/
+__pycache__/
+*.xml
